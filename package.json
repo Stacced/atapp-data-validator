@@ -1,0 +1,25 @@
+{
+  "name": "atapp-data-validator",
+  "version": "1.0.0",
+  "description": "Express app to practice data validation using multiple npm packages, such as validate.js, IBAN, etc.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "Stacked",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Stacced/atapp-data-validator"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "iban": "0.0.14",
+    "moment": "^2.24.0",
+    "validate.js": "^0.13.1"
+  },
+  "devDependencies": {
+    "portfinder": "^1.0.25"
+  }
+}

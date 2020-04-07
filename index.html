@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ATAPP Data Validator</title>
+</head>
+<body>
+	<label>
+		Date
+		<input type="date" id="date">
+	</label><br><br>
+	<label>
+		Email
+		<input type="email" id="email">
+	</label><br><br>
+	<label>
+		AVS number
+		<input type="text" id="avs" pattern="756.?[0-9]{4}.?[0-9]{4}.?[0-9]{2}">
+	</label><br><br>
+	<label>
+		Phone number (CH / FR)
+		<input type="text" id="phone">
+	</label><br><br>
+	<label>
+		IBAN (CH / FR)
+		<input type="text" id="iban">
+	</label><br><br>
+	<label>
+		Red payment slip reference number
+		<input type="text" id="bvr">
+	</label><br><br>
+	<label>
+		Rich text (supports HTML)
+		<textarea id="richtext" cols="50" rows="5" style="resize: none"></textarea>
+	</label><br><br>
+	<button onclick="validate()">Valider les données</button>
+	<fieldset id="result" style="border: 2px solid red; padding: 20px;">
+		<legend>Result</legend>
+		<div id="errors">
+
+		</div>
+	</fieldset>
+</body>
+<script>
+	function validate() {
+	    // Clear result div
+		document.getElementById('errors').innerHTML = '';
+
+	    // Get values
+		const date = document.getElementById('date').value;
+		const email = document.getElementById('email').value;
+		const avs = document.getElementById('avs').value;
+		const phone = document.getElementById('phone').value;
+		const iban = document.getElementById('iban').value;
+		const bvr = document.getElementById('bvr').value;
+		const richtext = document.getElementById('richtext').value;
+
+		// Send API validate request
+		fetch('/api/validate', {
+		    method: 'POST',
+			headers: {
+		        'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				date: date,
+				email: email,
+				avs: avs,
+				phone: phone,
+				iban: iban,
+				bvr: bvr,
+				richtext: richtext
+			})
+		})
+			.then(response => response.json())
+			.then(jsonData => {
+			    const result = document.getElementById('result');
+			    const ul = document.createElement('ul');
+			    result.append(ul);
+			    // Loop on each errorgroup
+                Object.keys(jsonData['errors']).forEach(errorGroup => {
+				    // Loop each error of error group
+                    jsonData['errors'][errorGroup].forEach(error => {
+						// Create li element for each error
+						const errorLi = document.createElement('li');
+						errorLi.innerText = error;
+
+						// Append li to ul
+						ul.append(errorLi);
+					})
+				})
+			});
+	}
+</script>
+</html>
